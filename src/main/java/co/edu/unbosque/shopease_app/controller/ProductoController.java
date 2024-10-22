@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 import java.util.Map;
 
 @Transactional
@@ -105,10 +106,58 @@ public class ProductoController {
 	public ResponseEntity<Map<Integer, List<ProductoModel>>> obtenerProductosPorCategoria() {
 		Map<Integer, List<ProductoModel>> productosPorCategoria = productoService.obtenerProductosPorCategoria();
 
+        ProductoModel actualizarProducto= productoService.updateProducto(id,productoModel);
+        if (actualizarProducto != null) {
+            return ResponseEntity.ok(actualizarProducto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    @DeleteMapping("/eliminar/{id}")
+    @Operation(summary = "Eliminar Producto", description = "Elimina una Producto por su ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Producto eliminada exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Producto no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<String> eliminarProducto(@PathVariable int id) {
+        try {
+            boolean isRemoved = productoService.deleteProducto(id);
+            if (isRemoved) {
+                return ResponseEntity.ok("Producto eliminada exitosamente.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrada.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Considera usar un logger
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al eliminar la producto: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/productos-ordenados-por-categoria")
+	@Operation(summary = "Obtener productos ordenados por categoría", description = "Devuelve una lista de productos agrupados y ordenados por el nombre de la categoría en formato JSON")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Productos encontrados y ordenados"),
+			@ApiResponse(responseCode = "404", description = "Productos o categorías no encontrados")
+	})
+	public ResponseEntity<Map<Object, List<ProductoModel>>> obtenerProductosOrdenadosPorNombreCategoria() {
+		// Obtener el mapa de productos ordenados por nombre de categoría desde el servicio
+		Map<Object, List<ProductoModel>> productosOrdenadosPorCategoria = productoService.obtenerProductosOrdenadosPorNombreCategoria();
+
+		if (productosOrdenadosPorCategoria.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+
+		return ResponseEntity.ok(productosOrdenadosPorCategoria);
+	}
+
+
 		if (!productosPorCategoria.isEmpty()) {
 			return ResponseEntity.ok(productosPorCategoria);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
+
 }
