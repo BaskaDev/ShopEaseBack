@@ -11,7 +11,7 @@
 	<groupId>co.edu.unbosque</groupId>
 	<artifactId>shopease-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>shopease-app</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.32</version>
+			<version>1.18.34</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -81,6 +81,7 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 
 		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -90,10 +91,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
+					
 					</excludes>
 				</configuration>
 			</plugin>
