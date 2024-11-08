@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = { "http://localhost:8090", "http://localhost:8080", "*" })
 @RequestMapping("/compras")
 public class CompraController {
 
@@ -53,12 +54,13 @@ public class CompraController {
 
             double totalCompra = 0.0;
             // Recorrer los productos comprados y llenar la tabla
-            for (Map<String, Object> producto : productosComprados) {
-                String nombre = (String) producto.get("nombre");
-                int cantidad = (int) producto.get("cantidad");
-                double precio = (double) producto.get("precio");
-                double totalProducto = precio * cantidad;
-                totalCompra += totalProducto;
+        for (Map<String, Object> producto : productosComprados) {
+              String nombre = (String) producto.get("nombre");
+            int cantidad = (int) producto.get("cantidad");
+            String precioAux = (String) producto.get("precio");
+            double precio = Double.parseDouble(precioAux);
+            double totalProducto = precio * cantidad;
+            totalCompra += totalProducto;
 
                 contenidoHtml.append("<tr style='text-align: center;'>");
                 contenidoHtml.append("<td style='border: 1px solid #ddd; padding: 8px;'>" + nombre + "</td>");
