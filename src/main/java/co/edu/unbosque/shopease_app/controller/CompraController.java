@@ -27,7 +27,7 @@ public class CompraController {
         @ApiResponse(responseCode = "500", description = "Error al enviar el correo de confirmación")
     })
     public ResponseEntity<String> enviarConfirmacionCompra(@RequestBody Map<String, Object> request) {
-        try {
+      
             // Obtener el email y la lista de productos del JSON
             String emailCliente = (String) request.get("emailCliente");
             List<Map<String, Object>> productosComprados = (List<Map<String, Object>>) request.get("productosComprados");
@@ -81,11 +81,7 @@ public class CompraController {
 
             return ResponseEntity.ok("Correo de confirmación enviado con éxito");
 
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al enviar el correo de confirmación: " + e.getMessage());
-        }
+        
     }
     
 }

@@ -185,19 +185,19 @@ public ResponseEntity<String> guardarUsuario(@RequestBody UsuarioModel usuario) 
 			@ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
 			@ApiResponse(responseCode = "400", description = "Nueva contraseña no válida")
 	})
-	public ResponseEntity<String> cambiarContrasenaPorEmail(@RequestBody String contraseña, String email) {
+	public ResponseEntity<String> cambiarContrasenaPorEmail(@RequestBody UsuarioLoginRequest loginRequest) {
 
-		UsuarioModel usuario = usuarioService.findByEmail(email);
+		UsuarioModel usuario = usuarioService.findByEmail(loginRequest.getEmail());
 
 		if (usuario == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
 		}
 
-		if (contraseña == null || contraseña.isEmpty()) {
+		if (loginRequest.getContraseña().isEmpty()) {
 			return ResponseEntity.badRequest().body("La nueva contraseña no puede estar vacía");
 		}
 
-		String nuevaContrasenaCifrada = passwordEncoder.encode(contraseña);
+		String nuevaContrasenaCifrada = passwordEncoder.encode(loginRequest.getContraseña());
 		usuario.setContraseña(nuevaContrasenaCifrada);
 		usuarioService.saveUsuario(usuario);
 		int id = usuario.getId_usuario();	
