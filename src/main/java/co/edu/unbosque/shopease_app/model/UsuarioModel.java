@@ -22,7 +22,7 @@ public class UsuarioModel {
 
 	@Id
 	private int id_usuario;
-
+//prueba
 	@Column(nullable = false)
 	private String nombre;
 
